@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fokus Zamanlayıcı</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Odaklanma Zamanlayıcısı</h1>
+        </header>
+
+        <main>
+            <section id="pomodoro-timer">
+                <h2>Pomodoro</h2>
+                <div id="timer-display">25:00</div>
+                <div class="timer-controls">
+                    <button id="startButton" title="Başlat"><i class="fas fa-play"></i></button>
+                    <button id="pauseButton" title="Duraklat"><i class="fas fa-pause"></i></button>
+                    <button id="resetButton" title="Sıfırla"><i class="fas fa-sync-alt"></i></button>
+                </div>
+                <div id="status-message">Çalışma Zamanı!</div>
+            </section>
+
+            <section id="music-player">
+                <h2>Odaklanma Müzikleri</h2>
+                <div id="audio-player-container">
+                    <audio id="audio-player-element"></audio>
+                    <div id="track-info">
+                        Çalınan Parça: <span id="current-track-title">---</span>
+                    </div>
+                    <div class="audio-controls">
+                        <button id="prev-button" title="Önceki Parça"><i class="fas fa-step-backward"></i></button>
+                        <button id="play-pause-button" title="Oynat/Duraklat"><i class="fas fa-play"></i></button>
+                        <button id="next-button" title="Sonraki Parça"><i class="fas fa-step-forward"></i></button>
+                    </div>
+                    <div id="playlist-container">
+                        <h3>Çalma Listesi</h3>
+                        <ul id="playlist">
+                            </ul>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 fokus.ibrahimgokdemir.com</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+fokus.ibrahimgokdemir.com {
+    root * /srv # docker-compose.yml'de site klasörünü bağladığımız yer
+    file_server
+    encode gzip zstd
+}
