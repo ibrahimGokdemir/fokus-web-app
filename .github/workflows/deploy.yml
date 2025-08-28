@@ -32,11 +32,12 @@ jobs:
         working-directory: /home/ibra/projects/fokus-web
 
       # 3. Adım: Docker container'larını yeniden başlat
-      - name: Restart Docker container
+      - name: Rebuild and Deploy Docker Container
         run: |
-          echo "Restarting Caddy container to apply changes..."
-          docker compose restart caddy
-        # Bu komutun da proje klasöründe çalışması gerekiyor.
+          echo "Bringing down the old container..."
+          docker compose down
+          echo "Building and starting the new container..."
+          docker compose up -d
         working-directory: /home/ibra/projects/fokus-web
 
       # 4. Adım: Bitiş mesajı
