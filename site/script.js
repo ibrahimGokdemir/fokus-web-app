@@ -196,3 +196,40 @@ document.addEventListener('DOMContentLoaded', () => {
     loadTrack(0);
     populatePlaylist();
 });
+
+// --- DARK MODE KODLARI ---
+document.addEventListener('DOMContentLoaded', () => {
+    // ... dosyanın en başındaki eski DOMContentLoaded içeriği burada kalacak ...
+
+    // Dark Mode Başlangıç
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const currentTheme = localStorage.getItem('theme');
+    const icon = darkModeToggle.querySelector('i');
+
+    // Sayfa yüklendiğinde hafızadaki temayı uygula
+    if (currentTheme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        icon.classList.remove('fa-moon');
+        icon.classList.add('fa-sun');
+    }
+
+    darkModeToggle.addEventListener('click', () => {
+        // Mevcut temayı kontrol et
+        let theme = document.documentElement.getAttribute('data-theme');
+        
+        if (theme === 'dark') {
+            // Açık moda geç
+            document.documentElement.removeAttribute('data-theme');
+            localStorage.setItem('theme', 'light');
+            icon.classList.remove('fa-sun');
+            icon.classList.add('fa-moon');
+        } else {
+            // Koyu moda geç
+            document.documentElement.setAttribute('data-theme', 'dark');
+            localStorage.setItem('theme', 'dark');
+            icon.classList.remove('fa-moon');
+            icon.classList.add('fa-sun');
+        }
+    });
+    // Dark Mode Bitiş
+});
