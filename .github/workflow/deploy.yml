@@ -1,0 +1,44 @@
+# İş akışımızın adı
+name: Deploy to VPS
+
+# Bu iş akışının ne zaman tetikleneceğini belirtir
+on:
+  # 'main' dalına her 'push' yapıldığında
+  push:
+    branches:
+      - main
+
+# Yapılacak işleri tanımlar
+jobs:
+  # 'deploy' adında bir iş tanımlıyoruz
+  deploy:
+    # Bu işin hangi runner üzerinde çalışacağını belirtiyoruz.
+    # 'self-hosted' etiketi, sunucumuza kurduğumuz runner'ı hedefler.
+    runs-on: self-hosted
+
+    # İşin adımlarını listeler
+    steps:
+      # 1. Adım: Başlangıç mesajı yazdır
+      - name: Starting deployment...
+        run: echo "🚀 Deployment initiated by a push to the main branch."
+
+      # 2. Adım: Proje klasörüne git ve en güncel kodu indir
+      - name: Pull latest source code
+        run: |
+          echo "Fetching latest code from GitHub..."
+          git pull origin main
+        # Bu komutun hangi klasörde çalışacağını belirtiyoruz.
+        # Sunucudaki proje yolunu buraya yazmalısın!
+        working-directory: /home/ibra/projects/fokus-web
+
+      # 3. Adım: Docker container'larını yeniden başlat
+      - name: Restart Docker container
+        run: |
+          echo "Restarting Caddy container to apply changes..."
+          docker compose restart fokus_app_caddy
+        # Bu komutun da proje klasöründe çalışması gerekiyor.
+        working-directory: /home/ibra/projects/fokus-web
+
+      # 4. Adım: Bitiş mesajı
+      - name: Deployment successful
+        run: echo "✅ Site has been updated successfully!"
