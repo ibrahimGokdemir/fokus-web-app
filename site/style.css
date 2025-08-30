@@ -113,14 +113,13 @@ header h1 {
     stroke-linecap: round;
     transform: rotate(-90deg); /* Başlangıç noktasını üste taşır */
     transform-origin: center;
-    transition: stroke-dashoffset 0.3s linear;
+    transition: stroke-dashoffset 0.2s linear;
 }
 .progress-handle {
     fill: var(--container-bg);
     stroke: var(--timer-color);
     stroke-width: 4;
     cursor: grab;
-    transition: transform 0.3s;
     z-index: 5;
 }
 .progress-handle:active {
