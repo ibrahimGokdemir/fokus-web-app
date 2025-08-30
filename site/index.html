@@ -10,14 +10,21 @@
 <body>
     <div class="container">
         <header>
-            <h1>Odaklanma Zamanlayıcısı</h1>
-            <button id="darkModeToggle" class="theme-toggle-button" title="Temayı Değiştir"><i class="fas fa-moon"></i></button>
+            <h1>
+                <span>Odaklanma Zamanlayıcısı</span>
+                <button id="darkModeToggle" class="theme-toggle-button" title="Temayı Değiştir"><i class="fas fa-moon"></i></button>
+            </h1>
         </header>
 
         <main>
             <section id="pomodoro-timer">
-                <h2>Pomodoro</h2>
-                <div id="timer-display">25:00</div>
+                <div class="timer-container">
+                    <svg id="progress-ring" width="300" height="300">
+                        <circle class="progress-ring-bg" cx="150" cy="150" r="140"></circle>
+                        <circle class="progress-ring-fg" cx="150" cy="150" r="140"></circle>
+                    </svg>
+                    <div id="timer-display">25:00</div>
+                </div>
                 <div class="timer-controls">
                     <button id="startButton" title="Başlat"><i class="fas fa-play"></i></button>
                     <button id="pauseButton" title="Duraklat"><i class="fas fa-pause"></i></button>
@@ -25,32 +32,16 @@
                 </div>
                 <div id="status-message">Çalışma Zamanı!</div>
             </section>
-
-            <section id="music-player">
-                <h2>Odaklanma Müzikleri</h2>
-                <div id="audio-player-container">
-                    <audio id="audio-player-element"></audio>
-                    <div id="track-info">
-                        Çalınan Parça: <span id="current-track-title">---</span>
-                    </div>
-                    <div class="audio-controls">
-                        <button id="prev-button" title="Önceki Parça"><i class="fas fa-step-backward"></i></button>
-                        <button id="play-pause-button" title="Oynat/Duraklat"><i class="fas fa-play"></i></button>
-                        <button id="next-button" title="Sonraki Parça"><i class="fas fa-step-forward"></i></button>
-                    </div>
-                    <div id="playlist-container">
-                        <h3>Çalma Listesi</h3>
-                        <ul id="playlist">
-                            </ul>
-                    </div>
-                </div>
-            </section>
         </main>
 
         <footer>
             <p>&copy; 2025 fokus.ibrahimgokdemir.com</p>
         </footer>
     </div>
+
+    <!-- Görünmez Ses Elementleri -->
+    <audio id="music-player-element" loop></audio>
+    <audio id="alarm-sound" src="sounds/bell.mp3"></audio>
 
     <script src="script.js"></script>
 </body>

@@ -1,212 +1,152 @@
-// --- POMODORO ZAMANLAYICI KODLARI ---
-const timerDisplay = document.getElementById('timer-display');
-const startButton = document.getElementById('startButton');
-const pauseButton = document.getElementById('pauseButton');
-const resetButton = document.getElementById('resetButton');
-const statusMessage = document.getElementById('status-message');
+document.addEventListener('DOMContentLoaded', () => {
+    // --- DOM Elementleri ---
+    const timerDisplay = document.getElementById('timer-display');
+    const startButton = document.getElementById('startButton');
+    const pauseButton = document.getElementById('pauseButton');
+    const resetButton = document.getElementById('resetButton');
+    const statusMessage = document.getElementById('status-message');
+    const musicPlayer = document.getElementById('music-player-element');
+    const alarmSound = document.getElementById('alarm-sound');
+    const progressRing = document.querySelector('.progress-ring-fg');
+    const darkModeToggle = document.getElementById('darkModeToggle');
 
-const workTime = 25 * 60;
-const shortBreakTime = 5 * 60;
-const longBreakTime = 15 * 60;
+    // --- Zamanlayıcı Ayarları ---
+    const workTime = 25 * 60;
+    const shortBreakTime = 5 * 60;
+    const longBreakTime = 15 * 60;
+    let currentTime;
+    let totalTime;
+    let isPaused = true;
+    let intervalId = null;
+    let pomodoroCount = 0;
+    let currentMode = 'work';
 
-let currentTime = workTime;
-let isPaused = true;
-let intervalId = null;
-let pomodoroCount = 0;
-let currentMode = 'work';
+    // --- Müzik Listesi ---
+    const tracks = [
+        "music/Lofi1.mp3", "music/Lofi2.m4a", "music/Lofi3.mp3",
+        "music/Lofi4.mp3", "music/Lofi5.mp3", "music/Lofi6.mp3"
+    ];
+    let currentTrackIndex = 0;
 
-function displayTime(seconds) {
-    const minutes = Math.floor(seconds / 60);
-    const remainderSeconds = seconds % 60;
-    timerDisplay.textContent = `${minutes}:${remainderSeconds < 10 ? '0' : ''}${remainderSeconds}`;
-}
+    // --- İlerleme Çemberi Ayarları ---
+    const radius = progressRing.r.baseVal.value;
+    const circumference = 2 * Math.PI * radius;
+    progressRing.style.strokeDasharray = `${circumference} ${circumference}`;
+    progressRing.style.strokeDashoffset = circumference;
 
-function countdown() {
-    currentTime--;
-    displayTime(currentTime);
-    if (currentTime < 0) {
-        clearInterval(intervalId);
-        switchMode();
+    // --- Fonksiyonlar ---
+    function setProgress(percent) {
+        const offset = circumference - (percent / 100) * circumference;
+        progressRing.style.strokeDashoffset = offset;
     }
-}
 
-function switchMode() {
-    if (currentMode === 'work') {
-        pomodoroCount++;
-        if (pomodoroCount % 4 === 0) {
-            currentMode = 'longBreak';
-            currentTime = longBreakTime;
-            statusMessage.textContent = "Uzun Mola Zamanı!";
-        } else {
-            currentMode = 'shortBreak';
-            currentTime = shortBreakTime;
-            statusMessage.textContent = "Kısa Mola Zamanı!";
+    function displayTime(seconds) {
+        const minutes = Math.floor(seconds / 60);
+        const remainderSeconds = seconds % 60;
+        timerDisplay.textContent = `${minutes}:${remainderSeconds < 10 ? '0' : ''}${remainderSeconds}`;
+    }
+
+    function startTimer() {
+        if (isPaused) {
+            isPaused = false;
+            intervalId = setInterval(countdown, 1000);
+            startButton.style.display = 'none';
+            pauseButton.style.display = 'inline-block';
+            if (currentMode === 'work') {
+                playMusic();
+            }
         }
-    } else {
-        currentMode = 'work';
-        currentTime = workTime;
-        statusMessage.textContent = "Çalışma Zamanı!";
     }
-    displayTime(currentTime);
-    isPaused = true;
-    startButton.style.display = 'inline-block';
-    pauseButton.style.display = 'none';
-}
 
-startButton.addEventListener('click', () => {
-    if (isPaused) {
-        isPaused = false;
-        intervalId = setInterval(countdown, 1000);
-        startButton.style.display = 'none';
-        pauseButton.style.display = 'inline-block';
+    function pauseTimer() {
+        if (!isPaused) {
+            isPaused = true;
+            clearInterval(intervalId);
+            startButton.style.display = 'inline-block';
+            pauseButton.style.display = 'none';
+            musicPlayer.pause();
+        }
     }
-});
 
-pauseButton.addEventListener('click', () => {
-    if (!isPaused) {
-        isPaused = true;
+    function resetTimer() {
         clearInterval(intervalId);
+        isPaused = true;
+        currentMode = 'work';
+        pomodoroCount = 0;
+        totalTime = workTime;
+        currentTime = workTime;
+        displayTime(currentTime);
+        setProgress(100);
+        statusMessage.textContent = "Çalışma Zamanı!";
         startButton.style.display = 'inline-block';
         pauseButton.style.display = 'none';
-    }
-});
-
-resetButton.addEventListener('click', () => {
-    clearInterval(intervalId);
-    isPaused = true;
-    currentMode = 'work';
-    pomodoroCount = 0;
-    currentTime = workTime;
-    displayTime(currentTime);
-    statusMessage.textContent = "Çalışma Zamanı!";
-    startButton.style.display = 'inline-block';
-    pauseButton.style.display = 'none';
-});
-
-// --- YENİ SES OYNATICI KODLARI ---
-const audioPlayer = document.getElementById('audio-player-element');
-const playPauseButton = document.getElementById('play-pause-button');
-const prevButton = document.getElementById('prev-button');
-const nextButton = document.getElementById('next-button');
-const currentTrackTitleDisplay = document.getElementById('current-track-title');
-const playlistElement = document.getElementById('playlist');
-
-const tracks = [
-
-    { title: "Lofi 1", path: "music/Lofi1.mp3" },
-    { title: "Lofi 2", path: "music/Lofi2.m4a" },
-    { title: "Lofi 3", path: "music/Lofi3.mp3" },
-    { title: "Lofi 4", path: "music/Lofi4.mp3" },
-    { title: "Lofi 5", path: "music/Lofi5.mp3" },
-    { title: "Lofi 6", path: "music/Lofi6.mp3" }
-
-];
-
-let currentTrackIndex = 0;
-let isAudioPlaying = false;
-
-function loadTrack(trackIndex) {
-    if (trackIndex >= 0 && trackIndex < tracks.length) {
-        currentTrackIndex = trackIndex;
-        audioPlayer.src = tracks[currentTrackIndex].path;
-        currentTrackTitleDisplay.textContent = tracks[currentTrackIndex].title;
-        updatePlaylistUI();
-    }
-}
-
-function populatePlaylist() {
-    playlistElement.innerHTML = '';
-    tracks.forEach((track, index) => {
-        const listItem = document.createElement('li');
-        listItem.textContent = track.title;
-        listItem.setAttribute('data-index', index);
-        listItem.addEventListener('click', () => {
-            loadTrack(index);
-            playAudio();
-        });
-        playlistElement.appendChild(listItem);
-    });
-    updatePlaylistUI();
-}
-
-function updatePlaylistUI() {
-    const playlistItems = playlistElement.querySelectorAll('li');
-    playlistItems.forEach((item, index) => {
-        if (index === currentTrackIndex) {
-            item.classList.add('active-track');
-        } else {
-            item.classList.remove('active-track');
+        musicPlayer.pause();
+        // Müzik çaları sıfırla
+        if (tracks.length > 0) {
+            musicPlayer.src = tracks[currentTrackIndex];
         }
-    });
-}
-
-function updatePlayPauseIcon() {
-    const icon = playPauseButton.querySelector('i');
-    if (isAudioPlaying) {
-        icon.classList.remove('fa-play');
-        icon.classList.add('fa-pause');
-        playPauseButton.setAttribute('title', 'Duraklat');
-    } else {
-        icon.classList.remove('fa-pause');
-        icon.classList.add('fa-play');
-        playPauseButton.setAttribute('title', 'Oynat');
     }
-}
 
-function playAudio() {
-    audioPlayer.play().then(() => {
-        isAudioPlaying = true;
-        updatePlayPauseIcon();
-    }).catch(error => console.error("Otomatik oynatma engellendi: ", error));
-}
+    function countdown() {
+        currentTime--;
+        displayTime(currentTime);
+        setProgress((currentTime / totalTime) * 100);
 
-function pauseAudio() {
-    audioPlayer.pause();
-    isAudioPlaying = false;
-    updatePlayPauseIcon();
-}
+        if (currentTime < 0) {
+            clearInterval(intervalId);
+            alarmSound.play();
+            musicPlayer.pause();
+            // Zil sesinin bitmesi için kısa bir bekleme
+            setTimeout(switchMode, 3000);
+        }
+    }
 
-playPauseButton.addEventListener('click', () => {
-    isAudioPlaying ? pauseAudio() : playAudio();
-});
+    function switchMode() {
+        if (currentMode === 'work') {
+            pomodoroCount++;
+            if (pomodoroCount % 4 === 0) {
+                currentMode = 'longBreak';
+                totalTime = longBreakTime;
+                statusMessage.textContent = "Uzun Mola Zamanı!";
+            } else {
+                currentMode = 'shortBreak';
+                totalTime = shortBreakTime;
+                statusMessage.textContent = "Kısa Mola Zamanı!";
+            }
+        } else {
+            currentMode = 'work';
+            totalTime = workTime;
+            statusMessage.textContent = "Çalışma Zamanı!";
+        }
+        currentTime = totalTime;
+        displayTime(currentTime);
+        setProgress(100);
+        isPaused = true;
+        startButton.style.display = 'none';
+        pauseButton.style.display = 'inline-block';
+        startTimer(); // Bir sonraki modu otomatik başlat
+    }
+    
+    function playMusic() {
+        if (tracks.length === 0) return;
+        musicPlayer.src = tracks[currentTrackIndex];
+        musicPlayer.play().catch(e => console.error("Müzik oynatılamadı:", e));
+    }
+    
+    musicPlayer.addEventListener('ended', () => {
+        currentTrackIndex = (currentTrackIndex + 1) % tracks.length;
+        playMusic();
+    });
 
-nextButton.addEventListener('click', () => {
-    currentTrackIndex = (currentTrackIndex + 1) % tracks.length;
-    loadTrack(currentTrackIndex);
-    playAudio();
-});
+    // --- Olay Dinleyicileri (Event Listeners) ---
+    startButton.addEventListener('click', startTimer);
+    pauseButton.addEventListener('click', pauseTimer);
+    resetButton.addEventListener('click', resetTimer);
 
-prevButton.addEventListener('click', () => {
-    currentTrackIndex = (currentTrackIndex - 1 + tracks.length) % tracks.length;
-    loadTrack(currentTrackIndex);
-    playAudio();
-});
-
-audioPlayer.addEventListener('ended', () => {
-    nextButton.click();
-});
-
-// Sayfa ilk yüklendiğinde
-document.addEventListener('DOMContentLoaded', () => {
-    // Pomodoro
-    pauseButton.style.display = 'none';
-    displayTime(currentTime);
-
-    // Müzik Çalar
-    loadTrack(0);
-    populatePlaylist();
-});
-
-// --- DARK MODE KODLARI ---
-document.addEventListener('DOMContentLoaded', () => {
-    // ... dosyanın en başındaki eski DOMContentLoaded içeriği burada kalacak ...
-
-    // Dark Mode Başlangıç
-    const darkModeToggle = document.getElementById('darkModeToggle');
+    // --- Dark Mode Mantığı ---
     const currentTheme = localStorage.getItem('theme');
     const icon = darkModeToggle.querySelector('i');
 
-    // Sayfa yüklendiğinde hafızadaki temayı uygula
     if (currentTheme === 'dark') {
         document.documentElement.setAttribute('data-theme', 'dark');
         icon.classList.remove('fa-moon');
@@ -214,22 +154,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     darkModeToggle.addEventListener('click', () => {
-        // Mevcut temayı kontrol et
         let theme = document.documentElement.getAttribute('data-theme');
-        
         if (theme === 'dark') {
-            // Açık moda geç
             document.documentElement.removeAttribute('data-theme');
             localStorage.setItem('theme', 'light');
             icon.classList.remove('fa-sun');
             icon.classList.add('fa-moon');
         } else {
-            // Koyu moda geç
             document.documentElement.setAttribute('data-theme', 'dark');
             localStorage.setItem('theme', 'dark');
             icon.classList.remove('fa-moon');
             icon.classList.add('fa-sun');
         }
     });
-    // Dark Mode Bitiş
+
+    // --- Başlangıç Durumu ---
+    resetTimer();
 });
