@@ -46,11 +46,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const remainderSeconds = seconds % 60;
         timerDisplay.textContent = `${minutes}:${remainderSeconds < 10 ? '0' : ''}${remainderSeconds}`;
     };
-
-    const playMusic = () => {
+    
+    const loadAndPlayMusic = () => {
         if (TRACKS.length === 0) return;
         musicPlayer.src = TRACKS[currentTrackIndex];
-        musicPlayer.play().catch(e => console.error("Müzik Oynatma Hatası (Kullanıcı etkileşimi bekleniyor olabilir):", e));
+        musicPlayer.play().catch(e => console.error("Müzik Oynatma Hatası:", e));
     };
 
     const startTimer = () => {
@@ -59,7 +59,17 @@ document.addEventListener('DOMContentLoaded', () => {
         intervalId = setInterval(countdown, 1000);
         startButton.style.display = 'none';
         pauseButton.style.display = 'inline-block';
-        if (currentMode === 'work') playMusic();
+        
+        // --- MÜZİK DEVAM ETME MANTIĞI ---
+        if (currentMode === 'work') {
+            // Eğer müzik duraklatılmışsa, sadece devam ettir.
+            if (musicPlayer.paused && musicPlayer.currentTime > 0) {
+                musicPlayer.play().catch(e => console.error("Müzik devam ettirilemedi:", e));
+            } else {
+                // Değilse (ilk başlangıç veya yeni şarkı), baştan başlat.
+                loadAndPlayMusic();
+            }
+        }
     };
 
     const pauseTimer = () => {
@@ -70,10 +80,10 @@ document.addEventListener('DOMContentLoaded', () => {
         pauseButton.style.display = 'none';
         musicPlayer.pause();
     };
-
+    
     const resetTimer = () => {
-        pauseTimer(); // Çalışıyorsa durdur
-        clearInterval(intervalId); // Her ihtimale karşı interval'i temizle
+        pauseTimer(); 
+        clearInterval(intervalId); 
         isPaused = true;
         currentMode = 'work';
         pomodoroCount = 0;
@@ -84,7 +94,11 @@ document.addEventListener('DOMContentLoaded', () => {
         statusMessage.textContent = "Çalışma Zamanı!";
         startButton.style.display = 'inline-block';
         pauseButton.style.display = 'none';
-        if (TRACKS.length > 0) musicPlayer.src = TRACKS[currentTrackIndex];
+        // Müziği sıfırla ama çalma
+        currentTrackIndex = 0;
+        if (TRACKS.length > 0) {
+           musicPlayer.src = TRACKS[currentTrackIndex];
+        }
     };
 
     const countdown = () => {
@@ -99,10 +113,10 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(switchMode, 3000);
         }
     };
-
+    
     const switchMode = () => {
         pomodoroCount += (currentMode === 'work') ? 1 : 0;
-
+        
         if (currentMode !== 'work') {
             currentMode = 'work';
             totalTime = WORK_TIME;
@@ -112,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
             totalTime = (currentMode === 'longBreak') ? LONG_BREAK_TIME : SHORT_BREAK_TIME;
             statusMessage.textContent = (currentMode === 'longBreak') ? "Uzun Mola Zamanı!" : "Kısa Mola Zamanı!";
         }
-
+        
         currentTime = totalTime;
         updateDisplay(currentTime);
         updateProgress(currentTime);
@@ -137,23 +151,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const initializeTheme = () => {
         const savedTheme = localStorage.getItem('theme');
         if (savedTheme === 'dark') {
-            // Sadece attribute'ü ayarla, toggle fonksiyonu ikonu da değiştirir
             htmlEl.setAttribute('data-theme', 'dark');
             darkModeToggle.querySelector('i').classList.replace('fa-moon', 'fa-sun');
         }
     };
 
-    // === Olay Dinleyicileri (Event Listeners) ===
+    // Olay Dinleyicileri
     startButton.addEventListener('click', startTimer);
     pauseButton.addEventListener('click', pauseTimer);
     resetButton.addEventListener('click', resetTimer);
     darkModeToggle.addEventListener('click', toggleDarkMode);
     musicPlayer.addEventListener('ended', () => {
         currentTrackIndex = (currentTrackIndex + 1) % TRACKS.length;
-        playMusic();
+        loadAndPlayMusic();
     });
 
-    // === Başlangıç ===
+    // Başlangıç
     initializeTheme();
     resetTimer();
 });
