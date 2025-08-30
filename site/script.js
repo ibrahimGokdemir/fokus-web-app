@@ -42,11 +42,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const remainderSeconds = safeSeconds % 60;
         timerDisplay.textContent = `${minutes}:${remainderSeconds < 10 ? '0' : ''}${remainderSeconds}`;
         
-        const percent = (safeSeconds / totalTime);
-        const offset = circumference - percent * circumference;
+        // İlerleme, 0'dan (başlangıç) 1'e (bitiş) doğru artar.
+        const progress = (totalTime - safeSeconds) / totalTime;
+        
+        // strokeDashoffset, çevreden (0%) 0'a (100%) doğru azalır.
+        const offset = circumference * (1 - progress);
         progressRing.style.strokeDashoffset = offset;
 
-        const angle = percent * 2 * Math.PI - (Math.PI / 2);
+        // Açı, -90 dereceden (üst) başlayıp 270 dereceye (tekrar üst) doğru artar.
+        const angle = progress * 2 * Math.PI - (Math.PI / 2);
         const handleX = centerX + Math.cos(angle) * radius;
         const handleY = centerY + Math.sin(angle) * radius;
         progressHandle.setAttribute('cx', handleX);
@@ -103,14 +107,17 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const countdown = () => {
-        currentTime--;
-        updateUI(currentTime);
+        // Sadece zamanlayıcı çalışıyorsa ve sürükleme yoksa ilerle
+        if (!isPaused && !isDragging) {
+            currentTime--;
+            updateUI(currentTime);
 
-        if (currentTime < 0) {
-            clearInterval(intervalId);
-            musicPlayer.pause();
-            alarmSound.play();
-            setTimeout(switchMode, 3000);
+            if (currentTime < 0) {
+                clearInterval(intervalId);
+                musicPlayer.pause();
+                alarmSound.play();
+                setTimeout(switchMode, 3000);
+            }
         }
     };
     
@@ -159,13 +166,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // === Sürükleme Fonksiyonları ===
     const getAngle = (clientX, clientY) => {
         const svgRect = timerSvg.getBoundingClientRect();
-        // SVG merkezinin sayfa üzerindeki koordinatları
         const svgCenterX = svgRect.left + centerX;
         const svgCenterY = svgRect.top + centerY;
-        // Fare pozisyonuna göre vektör
         const x = clientX - svgCenterX;
         const y = clientY - svgCenterY;
-        // Açı hesabı ve -90 derece düzeltmesi
         let angle = Math.atan2(y, x) + Math.PI / 2;
         if (angle < 0) angle += 2 * Math.PI;
         return angle;
@@ -202,7 +206,7 @@ document.addEventListener('DOMContentLoaded', () => {
         window.removeEventListener('touchend', endDrag);
     };
 
-    // === Olay Dinleyicileri (Event Listeners) ===
+    // === Olay Dinleyicileri ===
     startButton.addEventListener('click', startTimer);
     pauseButton.addEventListener('click', pauseTimer);
     resetButton.addEventListener('click', resetTimer);
