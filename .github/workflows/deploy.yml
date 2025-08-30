@@ -1,45 +1,50 @@
-# İş akışımızın adı
-name: Deploy to VPS
+name: Lint and Deploy to VPS
 
-# Bu iş akışının ne zaman tetikleneceğini belirtir
 on:
-  # 'main' dalına her 'push' yapıldığında
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
 
-# Yapılacak işleri tanımlar
 jobs:
-  # 'deploy' adında bir iş tanımlıyoruz
-  deploy:
-    # Bu işin hangi runner üzerinde çalışacağını belirtiyoruz.
-    # 'self-hosted' etiketi, sunucumuza kurduğumuz runner'ı hedefler.
-    runs-on: self-hosted
+  # --- İŞ 1: Kod Kalitesini Kontrol Et ---
+  lint:
+    name: Run Linter Checks
+    runs-on: ubuntu-latest # Bu iş için GitHub'ın kendi sanal makinesini kullanabiliriz
 
-    # İşin adımlarını listeler
     steps:
-      # 1. Adım: Başlangıç mesajı yazdır
-      - name: Starting deployment...
-        run: echo "🚀 Deployment initiated by a push to the main branch."
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      # 2. Adım: Proje klasörüne git ve en güncel kodu indir
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.19.0' # LTS versiyonu
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run ESLint
+        run: npx eslint . --ext .js
+
+      - name: Run Stylelint
+        run: npx stylelint "**/*.css"
+
+  # --- İŞ 2: Sunucuya Dağıt ---
+  deploy:
+    name: Deploy to VPS
+    needs: lint # Bu işin başlaması için 'lint' işinin başarılı olmasını bekle
+    runs-on: self-hosted # Bu işi bizim sunucumuzdaki runner çalıştıracak
+
+    steps:
       - name: Pull latest source code
-        run: |
-          echo "Fetching latest code from GitHub..."
-          git pull origin main
-        # Bu komutun hangi klasörde çalışacağını belirtiyoruz.
-        # Sunucudaki proje yolunu buraya yazmalısın!
-        working-directory: /home/ibra/projects/fokus-web
+        run: git pull origin main
+        working-directory: /home/ibra/projects/fokus-web-app
 
-      # 3. Adım: Docker container'larını yeniden başlat
       - name: Rebuild and Deploy Docker Container
         run: |
-          echo "Bringing down the old container..."
           docker compose down
-          echo "Building and starting the new container..."
           docker compose up -d
-        working-directory: /home/ibra/projects/fokus-web
-
-      # 4. Adım: Bitiş mesajı
-      - name: Deployment successful
-        run: echo "✅ Site has been updated successfully!"
+        working-directory: /home/ibra/projects/fokus-web-app
