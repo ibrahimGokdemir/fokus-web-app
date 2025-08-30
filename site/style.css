@@ -1,4 +1,4 @@
-/* (Bir önceki yanıttaki CSS koduyla aynı, değişiklik yok) */
+/* Renk Değişkenleri */
 :root {
     --bg-color: #f4f7f6;
     --text-color: #333;
@@ -6,8 +6,6 @@
     --header-text: #2c3e50;
     --timer-color: #27ae60;
     --status-color: #7f8c8d;
-    --button-bg: #3498db;
-    --button-hover-bg: #2980b9;
     --border-color: #eee;
     --progress-ring-bg: #e6e6e6;
     --progress-ring-fg: var(--timer-color);
@@ -20,12 +18,11 @@ html[data-theme="dark"] {
     --header-text: #ffffff;
     --timer-color: #2ecc71;
     --status-color: #95a5a6;
-    --button-bg: #2980b9;
-    --button-hover-bg: #3498db;
     --border-color: #444;
     --progress-ring-bg: #444;
 }
 
+/* Genel Stiller */
 body {
     font-family: 'Segoe UI', system-ui, sans-serif;
     margin: 0;
@@ -37,6 +34,7 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
+    box-sizing: border-box;
 }
 
 .container {
@@ -77,6 +75,7 @@ header h1 {
     background-color: var(--progress-ring-bg);
 }
 
+/* Zamanlayıcı Stilleri */
 #pomodoro-timer {
     display: flex;
     flex-direction: column;
@@ -100,7 +99,6 @@ header h1 {
 .timer-svg {
     width: 300px;
     height: 300px;
-    transform: rotate(-90deg);
     z-index: 1;
 }
 .progress-ring-bg, .progress-ring-fg {
@@ -113,18 +111,20 @@ header h1 {
 .progress-ring-fg {
     stroke: var(--progress-ring-fg);
     stroke-linecap: round;
-    transition: stroke-dashoffset 0.5s linear;
+    transform: rotate(-90deg); /* Başlangıç noktasını üste taşır */
+    transform-origin: center;
+    transition: stroke-dashoffset 0.3s linear;
 }
 .progress-handle {
     fill: var(--container-bg);
     stroke: var(--timer-color);
     stroke-width: 4;
     cursor: grab;
-    transition: all 0.2s;
+    transition: transform 0.3s;
+    z-index: 5;
 }
 .progress-handle:active {
     cursor: grabbing;
-    r: 15;
 }
 
 #timer-display {
@@ -132,7 +132,7 @@ header h1 {
     font-weight: bold;
     color: var(--timer-color);
     z-index: 2;
-    pointer-events: none;
+    pointer-events: none; /* Tıklamaların içinden geçmesine izin ver */
 }
 
 .timer-controls {
@@ -144,7 +144,7 @@ header h1 {
     height: 100%;
     padding-bottom: 40px;
     z-index: 3;
-    opacity: 0.2;
+    opacity: 0.1;
     transition: opacity 0.3s ease;
 }
 
