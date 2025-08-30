@@ -18,25 +18,21 @@
 
         <main>
             <section id="pomodoro-timer">
-                <div class="timer-container">
-                    <svg id="progress-ring" width="300" height="300">
-                        <circle class="progress-ring-bg" cx="150" cy="150" r="140"></circle>
-                        <circle class="progress-ring-fg" cx="150" cy="150" r="140"></circle>
+                <div class="timer-wrapper">
+                    <svg id="progress-ring" class="progress-ring">
+                        <circle class="progress-ring-bg" r="140" cx="150" cy="150" />
+                        <circle class="progress-ring-fg" r="140" cx="150" cy="150" />
                     </svg>
                     <div id="timer-display">25:00</div>
-                </div>
-                <div class="timer-controls">
-                    <button id="startButton" title="Başlat"><i class="fas fa-play"></i></button>
-                    <button id="pauseButton" title="Duraklat"><i class="fas fa-pause"></i></button>
-                    <button id="resetButton" title="Sıfırla"><i class="fas fa-sync-alt"></i></button>
+                    <div class="timer-controls">
+                        <button id="startButton" title="Başlat"><i class="fas fa-play"></i></button>
+                        <button id="pauseButton" title="Duraklat" style="display: none;"><i class="fas fa-pause"></i></button>
+                        <button id="resetButton" title="Sıfırla"><i class="fas fa-sync-alt"></i></button>
+                    </div>
                 </div>
                 <div id="status-message">Çalışma Zamanı!</div>
             </section>
         </main>
-
-        <footer>
-            <p>&copy; 2025 fokus.ibrahimgokdemir.com</p>
-        </footer>
     </div>
 
     <!-- Görünmez Ses Elementleri -->
