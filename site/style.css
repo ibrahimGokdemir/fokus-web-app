@@ -1,4 +1,4 @@
-/* Renk Değişkenleri */
+/* (Bir önceki yanıttaki CSS koduyla aynı, değişiklik yok) */
 :root {
     --bg-color: #f4f7f6;
     --text-color: #333;
@@ -26,7 +26,6 @@ html[data-theme="dark"] {
     --progress-ring-bg: #444;
 }
 
-/* Genel Stiller */
 body {
     font-family: 'Segoe UI', system-ui, sans-serif;
     margin: 0;
@@ -78,7 +77,6 @@ header h1 {
     background-color: var(--progress-ring-bg);
 }
 
-/* Zamanlayıcı Stilleri */
 #pomodoro-timer {
     display: flex;
     flex-direction: column;
@@ -94,16 +92,16 @@ header h1 {
     place-items: center;
 }
 
-.progress-ring, #timer-display, .timer-controls {
+.timer-svg, #timer-display, .timer-controls {
     grid-column: 1;
     grid-row: 1;
 }
 
-.progress-ring {
+.timer-svg {
     width: 300px;
     height: 300px;
     transform: rotate(-90deg);
-    z-index: 1; /* En arkada */
+    z-index: 1;
 }
 .progress-ring-bg, .progress-ring-fg {
     fill: none;
@@ -117,13 +115,24 @@ header h1 {
     stroke-linecap: round;
     transition: stroke-dashoffset 0.5s linear;
 }
+.progress-handle {
+    fill: var(--container-bg);
+    stroke: var(--timer-color);
+    stroke-width: 4;
+    cursor: grab;
+    transition: all 0.2s;
+}
+.progress-handle:active {
+    cursor: grabbing;
+    r: 15;
+}
 
 #timer-display {
     font-size: 4em;
     font-weight: bold;
     color: var(--timer-color);
-    z-index: 2; /* Ortada */
-    pointer-events: none; /* Tıklamaların içinden geçmesine izin ver */
+    z-index: 2;
+    pointer-events: none;
 }
 
 .timer-controls {
@@ -134,13 +143,13 @@ header h1 {
     width: 100%;
     height: 100%;
     padding-bottom: 40px;
-    z-index: 3; /* En üstte, tıklanabilir */
-    opacity: 0.2; /* Her zaman hafifçe görünür */
+    z-index: 3;
+    opacity: 0.2;
     transition: opacity 0.3s ease;
 }
 
 .timer-wrapper:hover .timer-controls {
-    opacity: 1; /* Üzerine gelince tam görünür */
+    opacity: 1;
 }
 
 .timer-controls button {
