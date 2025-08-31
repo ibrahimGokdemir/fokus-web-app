@@ -1,45 +1,54 @@
-# İş akışımızın adı
-name: Deploy to VPS
-
-# Bu iş akışının ne zaman tetikleneceğini belirtir
+name: Lint and Deploy to VPS
 on:
-  # 'main' dalına her 'push' yapıldığında
   push:
     branches:
       - main
-
-# Yapılacak işleri tanımlar
+  pull_request:
+    branches:
+      - main
 jobs:
-  # 'deploy' adında bir iş tanımlıyoruz
-  deploy:
-    # Bu işin hangi runner üzerinde çalışacağını belirtiyoruz.
-    # 'self-hosted' etiketi, sunucumuza kurduğumuz runner'ı hedefler.
-    runs-on: self-hosted
-
-    # İşin adımlarını listeler
+  # --- İŞ 1: Kod Kalitesini Kontrol Et ---
+  lint:
+    name: Run Linter Checks
+    runs-on: ubuntu-latest
+   
     steps:
-      # 1. Adım: Başlangıç mesajı yazdır
-      - name: Starting deployment...
-        run: echo "🚀 Deployment initiated by a push to the main branch."
-
-      # 2. Adım: Proje klasörüne git ve en güncel kodu indir
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: List files (debug için)
+      run: |
+        ls -la
+        find . -name "package.json" -type f
+      
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        
+    - name: Install dependencies
+      run: npm install
+      working-directory: ./  # package.json'ın bulunduğu dizin
+          
+    - name: Run ESLint
+      run: npx eslint . --ext .js
+          
+    - name: Run Stylelint
+      run: npx stylelint "**/*.css"
+        
+  # --- İŞ 2: Sunucuya Dağıt ---
+  deploy:
+    name: Deploy to VPS
+    needs: lint
+    runs-on: self-hosted
+    steps:
       - name: Pull latest source code
-        run: |
-          echo "Fetching latest code from GitHub..."
-          git pull origin main
-        # Bu komutun hangi klasörde çalışacağını belirtiyoruz.
-        # Sunucudaki proje yolunu buraya yazmalısın!
-        working-directory: /home/ibra/projects/fokus-web
-
-      # 3. Adım: Docker container'larını yeniden başlat
+        run: git pull origin main
+        working-directory: /home/ibra/projects/fokus-web-app
+        
       - name: Rebuild and Deploy Docker Container
         run: |
-          echo "Bringing down the old container..."
           docker compose down
-          echo "Building and starting the new container..."
           docker compose up -d
-        working-directory: /home/ibra/projects/fokus-web
-
-      # 4. Adım: Bitiş mesajı
-      - name: Deployment successful
-        run: echo "✅ Site has been updated successfully!"
+        working-directory: /home/ibra/projects/fokus-web-app
