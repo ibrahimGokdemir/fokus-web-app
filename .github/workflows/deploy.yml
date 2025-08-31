@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
    
     steps:
-      # DÜZELTME: path parametresini kaldır, varsayılan checkout kullan
+      # DÜZELTME: Sadece checkout kullan, hiçbir ek parametre yok
       - name: Checkout code
         uses: actions/checkout@v4
         
