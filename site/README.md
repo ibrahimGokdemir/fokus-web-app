@@ -6,7 +6,7 @@ Bu proje, Pomodoro tekniğini ve odaklanma müziklerini bir araya getiren basit 
 -   Ayarlanabilir Pomodoro ve mola zamanlayıcıları.
 -   Otomatik başlayan arka plan müzikleri.
 -   İnteraktif, sürüklenerek ayarlanabilen zaman çemberi.
--   Kullanıcı tercihini hatırlayan Dark Mode.
+-   Kullanıcı tercihini hatırlayan Dark Mod.
 
 ## Teknoloji
 -   **Frontend:** HTML, CSS, JavaScript
