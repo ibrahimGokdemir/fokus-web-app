@@ -17,17 +17,16 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        # Bu komut, kodu ${{ github.workspace }}/fokus-web-app/ altına indirir.
+        # Bu komut, kodu varsayılan olarak ./fokus-web-app/ altına indirir.
         # Bu yüzden sonraki adımlarda bu alt klasöre gitmemiz gerekiyor.
-        with:
-          path: 'fokus-web-app'
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      # --- NİHAİ DÜZELTME: Her komuta, çalışacağı adresi tek tek ve açıkça söylüyoruz ---
+      # --- NİHAİ DÜZELTME: Her komuta, checkout tarafından oluşturulan
+      # o tek alt klasörün içine girmesini emrediyoruz. ---
       - name: Install dependencies
         run: npm install
         working-directory: ./fokus-web-app
