@@ -2,7 +2,7 @@
 
 Bu proje, Pomodoro tekniğini ve odaklanma müziklerini bir araya getiren basit bir web uygulamasıdır.
 
-## Özellikler
+## Özellikler 
 -   Ayarlanabilir Pomodoro ve mola zamanlayıcıları.
 -   Otomatik başlayan arka plan müzikleri.
 -   İnteraktif, sürüklenerek ayarlanabilen zaman çemberi.
