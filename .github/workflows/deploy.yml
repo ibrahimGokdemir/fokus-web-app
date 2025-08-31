@@ -50,7 +50,7 @@ jobs:
         # --- THE FINAL FIX MADE WITH YOUR DISCOVERY ---
         working-directory: /home/ibra/projects/fokus-web-app
 
-      - name: Rebuild and Deploy Docker Container
+      - name: Rebuild and Deploy Docker Container2
         run: |
           docker compose down
           docker compose up -d
