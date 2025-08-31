@@ -1,5 +1,4 @@
 name: Lint and Deploy to VPS
-
 on:
   push:
     branches:
@@ -7,49 +6,41 @@ on:
   pull_request:
     branches:
       - main
-
 jobs:
   # --- İŞ 1: Kod Kalitesini Kontrol Et ---
   lint:
     name: Run Linter Checks
-    runs-on: ubuntu-latest 
-    
+    runs-on: ubuntu-latest
+   
     steps:
+      # DÜZELTME: path parametresini kaldır, varsayılan checkout kullan
       - name: Checkout code
         uses: actions/checkout@v4
-        # Bu komut, kodu varsayılan olarak ./fokus-web-app/ altına indirir.
-        # Bu yüzden sonraki adımlarda bu alt klasöre gitmemiz gerekiyor.
-
+        
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-
-      # --- NİHAİ DÜZELTME: Her komuta, checkout tarafından oluşturulan
-      # o tek alt klasörün içine girmesini emrediyoruz. ---
+          
       - name: Install dependencies
         run: npm install
-        working-directory: ./fokus-web-app
-
+        
       - name: Run ESLint
         run: npx eslint . --ext .js
-        working-directory: ./fokus-web-app
-
+        
       - name: Run Stylelint
         run: npx stylelint "**/*.css"
-        working-directory: ./fokus-web-app
-
+        
   # --- İŞ 2: Sunucuya Dağıt ---
   deploy:
     name: Deploy to VPS
-    needs: lint 
+    needs: lint
     runs-on: self-hosted
-
     steps:
       - name: Pull latest source code
         run: git pull origin main
         working-directory: /home/ibra/projects/fokus-web-app
-
+        
       - name: Rebuild and Deploy Docker Container
         run: |
           docker compose down
