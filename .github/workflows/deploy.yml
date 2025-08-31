@@ -9,10 +9,16 @@ on:
       - main
 
 jobs:
-  # --- İŞ 1: Kod Kalitesini Kontrol Et ---
+  # --- JOB 1: Check Code Quality ---
   lint:
     name: Run Linter Checks
-    runs-on: ubuntu-latest # Bu iş için GitHub'ın kendi sanal makinesini kullanabiliriz
+    runs-on: ubuntu-latest
+
+    # --- FINAL FIX: We set the default working directory
+    # to that stubborn subfolder.
+    defaults:
+      run:
+        working-directory: ./fokus-web-app
 
     steps:
       - name: Checkout code
@@ -21,7 +27,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22.19.0' # LTS versiyonu
+          node-version: '20'
 
       - name: Install dependencies
         run: npm install
@@ -32,19 +38,21 @@ jobs:
       - name: Run Stylelint
         run: npx stylelint "**/*.css"
 
-  # --- İŞ 2: Sunucuya Dağıt ---
+  # --- JOB 2: Deploy to Server ---
   deploy:
     name: Deploy to VPS
-    needs: lint # Bu işin başlaması için 'lint' işinin başarılı olmasını bekle
-    runs-on: self-hosted # Bu işi bizim sunucumuzdaki runner çalıştıracak
+    needs: lint
+    runs-on: self-hosted
 
     steps:
       - name: Pull latest source code
         run: git pull origin main
+        # --- THE FINAL FIX MADE WITH YOUR DISCOVERY ---
         working-directory: /home/ibra/projects/fokus-web-app
 
       - name: Rebuild and Deploy Docker Container
         run: |
           docker compose down
           docker compose up -d
+        # --- THE FINAL FIX MADE WITH YOUR DISCOVERY ---
         working-directory: /home/ibra/projects/fokus-web-app
