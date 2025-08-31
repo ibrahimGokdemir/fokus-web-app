@@ -1,4 +1,7 @@
-name: Lint and Deploy to VPS
+# İş akışının adı
+name: Lint, Secure and Deploy
+
+# Tetikleyiciler
 on:
   push:
     branches:
@@ -6,51 +9,57 @@ on:
   pull_request:
     branches:
       - main
+
+# İşler
 jobs:
-  # --- İŞ 1: Kod Kalitesini Kontrol Et ---
- # --- İŞ 1: Kod Kalitesini ve Güvenliği Kontrol Et ---
-lint:
-  name: Run Linter and Security Checks
-  runs-on: ubuntu-latest
+  # --- İŞ 1: Kod Kalitesini ve Güvenliği Kontrol Et ---
+  lint:
+    name: Run Linter and Security Checks
+    runs-on: ubuntu-latest
+    
+    steps: # SADECE BİR TANE steps: OLDUĞUNDAN EMİN OL
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript
 
-  steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          
+      - name: Install dependencies
+        run: npm install
+        working-directory: ./ # Kullanıcının bulduğu doğru çözüm
 
-    # YENİ ADIM 1: CodeQL Motorunu Başlat
-    - name: Initialize CodeQL
-      uses: github/codeql-action/init@v3
-      with:
-        languages: javascript # Tarayacağımız dil
+      - name: Run ESLint
+        run: npx eslint . --ext .js
+        working-directory: ./
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
+      - name: Run Stylelint
+        run: npx stylelint "**/*.css"
+        working-directory: ./
 
-    - name: Install dependencies
-      run: npm install
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
 
-    - name: Run ESLint
-      run: npx eslint . --ext .js
-
-    - name: Run Stylelint
-      run: npx stylelint "**/*.css"
-
-    # YENİ ADIM 2: CodeQL Analizini Gerçekleştir
-    - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v3
-        
   # --- İŞ 2: Sunucuya Dağıt ---
   deploy:
-    name: Deploy to VPS
+    name: Deploy to Production VPS
+    # Bu iş, sadece 'lint' işi başarıyla biterse çalışır
     needs: lint
+    # Bu iş, sadece 'main' dalına bir push olduğunda çalışır, PR'larda değil
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: self-hosted
+    
     steps:
       - name: Pull latest source code
         run: git pull origin main
         working-directory: /home/ibra/projects/fokus-web-app
-        
+
       - name: Rebuild and Deploy Docker Container
         run: |
           docker compose down
