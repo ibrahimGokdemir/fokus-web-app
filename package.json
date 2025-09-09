@@ -1,0 +1,25 @@
+{
+  "name": "fokus-web-app",
+  "version": "1.0.0",
+  "description": "Fokus Web Application",
+  "main": "index.js",
+  "scripts": {
+    "lint": "npm run lint:js && npm run lint:css",
+    "lint:js": "eslint . --ext .js,.html --ignore-path .gitignore",
+    "lint:css": "stylelint '**/*.css' --ignore-path .gitignore",
+    "lint:fix": "eslint . --ext .js,.html --fix && stylelint '**/*.css' --fix"
+  },
+  "keywords": [
+    "fokus",
+    "web",
+    "app"
+  ],
+  "author": "Ibrahim Gokdemir",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "eslint-plugin-html": "^8.1.1",
+    "stylelint": "^16.3.1",
+    "stylelint-config-standard": "^36.0.0"
+  }
+}
