@@ -33,15 +33,15 @@ jobs:
           
       - name: Install dependencies
         run: npm install
-        working-directory: ./ # Kullanıcının bulduğu doğru çözüm
+        working-directory: ./fokus-web-app # Kullanıcının bulduğu doğru çözüm
 
       - name: Run ESLint
         run: npx eslint . --ext .js
-        working-directory: ./
+        working-directory: ./fokus-web-app
 
       - name: Run Stylelint
         run: npx stylelint "**/*.css"
-        working-directory: ./
+        working-directory: ./fokus-web-app
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
