@@ -20,27 +20,28 @@ jobs:
     steps: # SADECE BİR TANE steps: OLDUĞUNDAN EMİN OL
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: List files (debug için)
-        run: |
-          ls -la
-          find . -name "package.json" -type f
-        
+       
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           
       - name: Install dependencies
-        run: npm install
+        run: |
+          cd site
+          npm install
         working-directory: ./  # package.json'ın bulunduğu dizin
 
       - name: Run ESLint
-        run: npx eslint . --ext .js
+        run: |
+          cd site
+          npx eslint . --ext .js
         working-directory: ./  # <-- BURAYA DA EKLE
 
       - name: Run Stylelint
-        run: npx stylelint "**/*.css"
+        run: |
+          cd site
+          npx stylelint "**/*.css"
         working-directory: ./  # <-- VE BURAYA
 
       - name: Perform CodeQL Analysis
