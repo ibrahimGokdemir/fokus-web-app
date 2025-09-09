@@ -1,9 +1,0 @@
-cat > package.json << 'EOF'
-{
-  "name": "fokus-web-app",
-  "version": "1.0.0",
-  "description": "Fokus Web Application",
-  "private": true,
-  "devDependencies": {}
-}
-EOF
