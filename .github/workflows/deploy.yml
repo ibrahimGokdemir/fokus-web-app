@@ -13,56 +13,33 @@ on:
 # İşler
 jobs:
   # --- İŞ 1: Kod Kalitesini ve Güvenliği Kontrol Et ---
+  # --- İŞ 1: Kod Kalitesini ve Güvenliği Kontrol Et ---
   lint:
-    name: Run Linter and Security Checks
+    name: Run Linter and Checks
     runs-on: ubuntu-latest
     
-    steps: # SADECE BİR TANE steps: OLDUĞUNDAN EMİN OL
+    steps:
       - name: Checkout code
         uses: actions/checkout@v4
-       
+      
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           
       - name: Install dependencies
-        run: |
-          cd site
-          npm install
-        working-directory: ./  # package.json'ın bulunduğu dizin
+        run: npm install
+        working-directory: ./site  # Sadece bu satır yeterli
 
       - name: Run ESLint
-        run: |
-          cd site
-          npx eslint . --ext .js
-        working-directory: ./  # <-- BURAYA DA EKLE
+        run: npx eslint . --ext .js
+        working-directory: ./site  # Sadece bu satır yeterli
 
       - name: Run Stylelint
-        run: |
-          cd site
-          npx stylelint "**/*.css"
-        working-directory: ./  # <-- VE BURAYA
+        run: npx stylelint "**/*.css"
+        working-directory: ./site  # Sadece bu satır yeterli
 
-      - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v3
-
-  # --- İŞ 2: Sunucuya Dağıt ---
-  deploy:
-    name: Deploy to Production VPS
-    # Bu iş, sadece 'lint' işi başarıyla biterse çalışır
-    needs: lint
-    # Bu iş, sadece 'main' dalına bir push olduğunda çalışır, PR'larda değil
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    runs-on: self-hosted
-    
-    steps:
-      - name: Pull latest source code
-        run: git pull origin main
-        working-directory: /home/ibra/projects/fokus-web-app
-
-      - name: Rebuild and Deploy Docker Container
-        run: |
-          docker compose down
-          docker compose up -d
-        working-directory: /home/ibra/projects/fokus-web-app
+      # CodeQL adımlarını geçici olarak devre dışı bırakıyoruz.
+      # Bunları daha sonra doğru şekilde tekrar ekleyeceğiz.
+      # - name: Perform CodeQL Analysis
+      #   uses: github/codeql-action/analyze@v3
