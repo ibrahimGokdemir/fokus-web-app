@@ -30,17 +30,17 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - name: List files in the current directory
-        run: ls -la
-          
       - name: Install dependencies
         run: npm install
+        working-directory: ./site  # <-- DOĞRU KLASÖR
 
       - name: Run ESLint
         run: npx eslint . --ext .js
+        working-directory: ./site  # <-- BURAYA DA EKLE
 
       - name: Run Stylelint
         run: npx stylelint "**/*.css"
+        working-directory: ./site  # <-- VE BURAYA
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
