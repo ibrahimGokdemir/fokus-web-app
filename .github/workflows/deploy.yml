@@ -20,27 +20,28 @@ jobs:
     steps: # SADECE BİR TANE steps: OLDUĞUNDAN EMİN OL
       - name: Checkout code
         uses: actions/checkout@v4
-      
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@v3
-        with:
-          languages: javascript
 
+      - name: List files (debug için)
+        run: |
+          ls -la
+          find . -name "package.json" -type f
+        
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          
       - name: Install dependencies
         run: npm install
-        working-directory: ./site  # <-- DOĞRU KLASÖR
+        working-directory: ./  # package.json'ın bulunduğu dizin
 
       - name: Run ESLint
         run: npx eslint . --ext .js
-        working-directory: ./site  # <-- BURAYA DA EKLE
+        working-directory: ./  # <-- BURAYA DA EKLE
 
       - name: Run Stylelint
         run: npx stylelint "**/*.css"
-        working-directory: ./site  # <-- VE BURAYA
+        working-directory: ./  # <-- VE BURAYA
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
