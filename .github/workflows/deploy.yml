@@ -27,3 +27,7 @@ jobs:
       # Adım 3: Kurulumu doğrula (Yeşil tik görmek için)
       - name: Verify Setup Complete
         run: echo "Temel kurulum başarıyla tamamlandı!"
+        
+      - name: Install dependencies
+        run: npm install
+        working-directory: ./site
