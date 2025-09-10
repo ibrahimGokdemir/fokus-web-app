@@ -1,40 +1,67 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="tr" data-theme="light">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Fokus Zamanlayıcı</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-</head>
-<body>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+  </head>
+  <body>
     <div class="container">
-        <header>
-            <h1>
-                <span>Odaklanma Zamanlayıcısı</span>
-                <button id="darkModeToggle" class="theme-toggle-button" title="Temayı Değiştir"><i class="fas fa-moon"></i></button>
-            </h1>
-        </header>
+      <header>
+        <h1>
+          <span>Odaklanma Zamanlayıcısı</span>
+          <button
+            id="darkModeToggle"
+            class="theme-toggle-button"
+            title="Temayı Değiştir"
+          >
+            <i class="fas fa-moon"></i>
+          </button>
+        </h1>
+      </header>
 
-        <main>
-            <section id="pomodoro-timer">
-                <div class="timer-wrapper">
-                    <svg id="timer-svg" class="timer-svg" width="300" height="300" viewBox="0 0 300 300">
-                        <circle class="progress-ring-bg" r="140" cx="150" cy="150" />
-                        <circle class="progress-ring-fg" r="140" cx="150" cy="150" />
-                        <!-- KRİTİK DÜZELTME: Başlangıç pozisyonu eklendi -->
-                        <circle id="progress-handle" class="progress-handle" r="10" cx="150" cy="10" />
-                    </svg>
-                    <div id="timer-display">25:00</div>
-                    <div class="timer-controls">
-                        <button id="startButton" title="Başlat"><i class="fas fa-play"></i></button>
-                        <button id="pauseButton" title="Duraklat" style="display: none;"><i class="fas fa-pause"></i></button>
-                        <button id="resetButton" title="Sıfırla"><i class="fas fa-sync-alt"></i></button>
-                    </div>
-                </div>
-                <div id="status-message">Çalışma Zamanı!</div>
-            </section>
-        </main>
+      <main>
+        <section id="pomodoro-timer">
+          <div class="timer-wrapper">
+            <svg
+              id="timer-svg"
+              class="timer-svg"
+              width="300"
+              height="300"
+              viewBox="0 0 300 300"
+            >
+              <circle class="progress-ring-bg" r="140" cx="150" cy="150" />
+              <circle class="progress-ring-fg" r="140" cx="150" cy="150" />
+              <!-- KRİTİK DÜZELTME: Başlangıç pozisyonu eklendi -->
+              <circle
+                id="progress-handle"
+                class="progress-handle"
+                r="10"
+                cx="150"
+                cy="10"
+              />
+            </svg>
+            <div id="timer-display">25:00</div>
+            <div class="timer-controls">
+              <button id="startButton" title="Başlat">
+                <i class="fas fa-play"></i>
+              </button>
+              <button id="pauseButton" title="Duraklat" style="display: none">
+                <i class="fas fa-pause"></i>
+              </button>
+              <button id="resetButton" title="Sıfırla">
+                <i class="fas fa-sync-alt"></i>
+              </button>
+            </div>
+          </div>
+          <div id="status-message">Çalışma Zamanı!</div>
+        </section>
+      </main>
     </div>
 
     <!-- Görünmez Ses Elementleri -->
@@ -42,5 +69,5 @@
     <audio id="alarm-sound" src="sounds/bell.mp3"></audio>
 
     <script src="script.js"></script>
-</body>
+  </body>
 </html>

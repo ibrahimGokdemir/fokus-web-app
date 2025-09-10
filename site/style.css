@@ -1,176 +1,188 @@
 /* Renk Değişkenleri */
 :root {
-    --bg-color: #f4f7f6;
-    --text-color: #333;
-    --container-bg: #ffffff;
-    --header-text: #2c3e50;
-    --timer-color: #27ae60;
-    --status-color: #7f8c8d;
-    --border-color: #eee;
-    --progress-ring-bg: #e6e6e6;
-    --progress-ring-fg: var(--timer-color);
+  --bg-color: #f4f7f6;
+  --text-color: #333;
+  --container-bg: #fff;
+  --header-text: #2c3e50;
+  --timer-color: #27ae60;
+  --status-color: #7f8c8d;
+  --border-color: #eee;
+  --progress-ring-bg: #e6e6e6;
+  --progress-ring-fg: var(--timer-color);
 }
 
-html[data-theme="dark"] {
-    --bg-color: #121212;
-    --text-color: #e0e0e0;
-    --container-bg: #1e1e1e;
-    --header-text: #ffffff;
-    --timer-color: #2ecc71;
-    --status-color: #95a5a6;
-    --border-color: #444;
-    --progress-ring-bg: #444;
+html[data-theme='dark'] {
+  --bg-color: #121212;
+  --text-color: #e0e0e0;
+  --container-bg: #1e1e1e;
+  --header-text: #fff;
+  --timer-color: #2ecc71;
+  --status-color: #95a5a6;
+  --border-color: #444;
+  --progress-ring-bg: #444;
 }
 
 /* Genel Stiller */
 body {
-    font-family: 'Segoe UI', system-ui, sans-serif;
-    margin: 0;
-    padding: 20px 10px;
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    transition: background-color 0.3s, color 0.3s;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    box-sizing: border-box;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  margin: 0;
+  padding: 20px 10px;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition:
+    background-color 0.3s,
+    color 0.3s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  box-sizing: border-box;
 }
 
 .container {
-    width: 90%;
-    max-width: 500px;
-    padding: 25px;
-    background-color: var(--container-bg);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-    border-radius: 15px;
+  width: 90%;
+  max-width: 500px;
+  padding: 25px;
+  background-color: var(--container-bg);
+  box-shadow: 0 10px 25px rgb(0 0 0 / 10%);
+  border-radius: 15px;
 }
 
 header h1 {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: var(--header-text);
-    margin: 0 0 20px 0;
-    padding-bottom: 15px;
-    border-bottom: 1px solid var(--border-color);
-    font-size: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--header-text);
+  margin: 0 0 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 1.5rem;
 }
 
 .theme-toggle-button {
-    background: none;
-    border: 1px solid var(--border-color);
-    color: var(--text-color);
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 1.4rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
+  background: none;
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
 }
+
 .theme-toggle-button:hover {
-    background-color: var(--progress-ring-bg);
+  background-color: var(--progress-ring-bg);
 }
 
 /* Zamanlayıcı Stilleri */
 #pomodoro-timer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .timer-wrapper {
-    position: relative;
-    width: 300px;
-    height: 300px;
-    margin: 20px 0;
-    display: grid;
-    place-items: center;
+  position: relative;
+  width: 300px;
+  height: 300px;
+  margin: 20px 0;
+  display: grid;
+  place-items: center;
 }
 
-.timer-svg, #timer-display, .timer-controls {
-    grid-column: 1;
-    grid-row: 1;
+.timer-svg,
+#timer-display,
+.timer-controls {
+  grid-column: 1;
+  grid-row: 1;
 }
 
 .timer-svg {
-    width: 300px;
-    height: 300px;
-    z-index: 1;
+  width: 300px;
+  height: 300px;
+  z-index: 1;
 }
-.progress-ring-bg, .progress-ring-fg {
-    fill: none;
-    stroke-width: 12;
-}
-.progress-ring-bg {
-    stroke: var(--progress-ring-bg);
-}
+
+.progress-ring-bg,
 .progress-ring-fg {
-    stroke: var(--progress-ring-fg);
-    stroke-linecap: round;
-    transform: rotate(-90deg); /* Başlangıç noktasını üste taşır */
-    transform-origin: center;
-    transition: stroke-dashoffset 0.2s linear;
+  fill: none;
+  stroke-width: 12;
 }
+
+.progress-ring-bg {
+  stroke: var(--progress-ring-bg);
+}
+
+.progress-ring-fg {
+  stroke: var(--progress-ring-fg);
+  stroke-linecap: round;
+  transform: rotate(-90deg); /* Başlangıç noktasını üste taşır */
+  transform-origin: center;
+  transition: stroke-dashoffset 0.2s linear;
+}
+
 .progress-handle {
-    fill: var(--container-bg);
-    stroke: var(--timer-color);
-    stroke-width: 4;
-    cursor: grab;
-    z-index: 5;
+  fill: var(--container-bg);
+  stroke: var(--timer-color);
+  stroke-width: 4;
+  cursor: grab;
+  z-index: 5;
 }
+
 .progress-handle:active {
-    cursor: grabbing;
+  cursor: grabbing;
 }
 
 #timer-display {
-    font-size: 4em;
-    font-weight: bold;
-    color: var(--timer-color);
-    z-index: 2;
-    pointer-events: none; /* Tıklamaların içinden geçmesine izin ver */
+  font-size: 4em;
+  font-weight: bold;
+  color: var(--timer-color);
+  z-index: 2;
+  pointer-events: none; /* Tıklamaların içinden geçmesine izin ver */
 }
 
 .timer-controls {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-end;
-    width: 100%;
-    height: 100%;
-    padding-bottom: 40px;
-    z-index: 3;
-    opacity: 0.1;
-    transition: opacity 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+  height: 100%;
+  padding-bottom: 40px;
+  z-index: 3;
+  opacity: 0.1;
+  transition: opacity 0.3s ease;
 }
 
 .timer-wrapper:hover .timer-controls {
-    opacity: 1;
+  opacity: 1;
 }
 
 .timer-controls button {
-    background-color: rgba(0,0,0,0.3);
-    color: white;
-    border: none;
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 1.1em;
-    margin-top: 10px;
-    transition: all 0.2s ease;
+  background-color: rgb(0 0 0 / 30%);
+  color: white;
+  border: none;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.1em;
+  margin-top: 10px;
+  transition: all 0.2s ease;
 }
+
 .timer-controls button:hover {
-    background-color: rgba(0,0,0,0.5);
-    transform: scale(1.1);
+  background-color: rgb(0 0 0 / 50%);
+  transform: scale(1.1);
 }
 
 #status-message {
-    font-size: 1.2em;
-    color: var(--status-color);
-    font-weight: bold;
-    margin-top: 10px;
+  font-size: 1.2em;
+  color: var(--status-color);
+  font-weight: bold;
+  margin-top: 10px;
 }

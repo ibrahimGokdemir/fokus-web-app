@@ -8,22 +8,31 @@ on:
       - main
 
 jobs:
-  # Tek bir işimiz var
   build-and-test:
     name: Build and Test
     runs-on: ubuntu-latest
     
     steps:
-      # Adım 1: Kodu indir
       - name: Checkout code
         uses: actions/checkout@v4
       
-      # Adım 2: Node.js ortamını kur
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           
-      # Adım 3: Kurulumu doğrula (Yeşil tik görmek için)
-      - name: Verify Setup Complete
-        run: echo "Temel kurulum başarıyla tamamlandı!"
+      - name: Install dependencies
+        run: npm install
+        working-directory: ./site
+        
+      - name: Add Execute Permissions
+        run: chmod +x ./node_modules/.bin/eslint ./node_modules/.bin/stylelint
+        working-directory: ./site
+        
+      - name: Run ESLint
+        run: npx eslint .
+        working-directory: ./site
+
+      - name: Run Stylelint
+        run: npx stylelint "**/*.css"
+        working-directory: ./site
