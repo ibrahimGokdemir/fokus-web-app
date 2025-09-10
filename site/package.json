@@ -1,11 +1,12 @@
 {
   "name": "site",
   "version": "1.0.0",
-  "description": "Bu proje, Pomodoro tekniğini ve odaklanma müziklerini bir araya getiren basit bir web uygulamasıdır.",
+  "description": "Bu proje, Pomodoro tekniğini ve odaklanma müziklerini bir araya getiren basit bir web uygulamasidir.",
   "main": "script.js",
   "scripts": {
-    "lint": "eslint . --ext .js",
-    "stylelint": "stylelint '**/*.css'"
+    "lint": "npx eslint . --ext .js",
+    "stylelint": "npx stylelint '**/*.css'"
+      
   },
   "keywords": [],
   "author": "",
