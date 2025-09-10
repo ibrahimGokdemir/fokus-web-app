@@ -25,9 +25,8 @@ jobs:
         run: npm install
         working-directory: ./site
         
-      # --- YENİ DEBUG ADIMI ---
-      - name: Check Executable Permissions
-        run: ls -la ./node_modules/.bin/
+      - name: Add Execute Permissions
+        run: chmod +x ./node_modules/.bin/eslint ./node_modules/.bin/stylelint
         working-directory: ./site
         
       # --- KONTROLLERİ DOĞRUDAN ÇALIŞTIRMA ---
