@@ -24,6 +24,15 @@ jobs:
         with:
           node-version: '20'
           
-      # Adım 3: Kurulumu doğrula (Yeşil tik görmek için)
-      - name: Verify Setup Complete
-        run: echo "Temel kurulum başarıyla tamamlandı!"
+      - name: Install dependencies
+        run: npm install
+        working-directory: ./site
+        
+      # --- YENİ ADIMLAR -----
+      - name: Run ESLint
+        run: npm run lint
+        working-directory: ./site
+
+      - name: Run Stylelint
+        run: npm run stylelint
+        working-directory: ./site
