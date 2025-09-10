@@ -4,7 +4,8 @@
   "description": "Bu proje, Pomodoro tekniğini ve odaklanma müziklerini bir araya getiren basit bir web uygulamasıdır.",
   "main": "script.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint . --ext .js",
+    "stylelint": "stylelint '**/*.css'"
   },
   "keywords": [],
   "author": "",
