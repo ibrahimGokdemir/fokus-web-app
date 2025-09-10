@@ -1,6 +1,7 @@
 {
   "name": "site",
   "version": "1.0.0",
+  "type": "module",
   "description": "Bu proje, Pomodoro tekniğini ve odaklanma müziklerini bir araya getiren basit bir web uygulamasidir.",
   "main": "script.js",
   "scripts": {
