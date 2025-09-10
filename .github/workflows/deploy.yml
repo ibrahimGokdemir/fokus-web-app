@@ -8,17 +8,14 @@ on:
       - main
 
 jobs:
-  # Tek bir işimiz var
   build-and-test:
     name: Build and Test
     runs-on: ubuntu-latest
     
     steps:
-      # Adım 1: Kodu indir
       - name: Checkout code
         uses: actions/checkout@v4
       
-      # Adım 2: Node.js ortamını kur
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
@@ -28,11 +25,16 @@ jobs:
         run: npm install
         working-directory: ./site
         
-      # --- YENİ ADIMLAR -----
-      - name: Run ESLint
-        run: npm run lint
+      # --- YENİ DEBUG ADIMI ---
+      - name: Check Executable Permissions
+        run: ls -la ./node_modules/.bin/
+        working-directory: ./site
+        
+      # --- KONTROLLERİ DOĞRUDAN ÇALIŞTIRMA ---
+      - name: Run ESLint directly
+        run: npx eslint . --ext .js
         working-directory: ./site
 
-      - name: Run Stylelint
-        run: npm run stylelint
+      - name: Run Stylelint directly
+        run: npx stylelint "**/*.css"
         working-directory: ./site
